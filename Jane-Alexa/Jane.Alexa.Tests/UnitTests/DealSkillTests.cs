@@ -1,0 +1,26 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Text;
+using System.Threading.Tasks;
+using Alexa.NET.Response;
+using Jane.Alexa.Services;
+using Jane.Alexa.Tests.Mocks;
+using Xunit;
+
+namespace Jane.Alexa.Tests.UnitTests
+{
+    public class DealSkillTests
+    {
+        [Fact]
+        public async Task GettingDealfrontResponse_ReturnsSkillResponse()
+        {
+            var service = new DealSkillService(new StoreFrontServiceMock());
+
+            var response = await service.GetStoreFrontSpeachResponse().ConfigureAwait(false);
+
+            var output = (SsmlOutputSpeech) response.Response.OutputSpeech;
+
+            Assert.Contains("Today's top deals on Jane are:", output.Ssml);
+        }
+    }
+}
