@@ -14,7 +14,7 @@ namespace Jane.Alexa.Services
         HttpClient Client();
     }
 
-    public class HttpClientService
+    public class HttpClientService : IHttpClientService
     {
         private readonly ConnectionSettings _connectionSettings;
 
