@@ -63,9 +63,14 @@ namespace Jane.Alexa.Controllers
 
 		}
 
-		private static SkillResponse CreateErrorSkillResponse()
+		private SkillResponse CreateErrorSkillResponse()
 		{
-			return new SkillResponse();
+			var speechResponse = new SsmlOutputSpeech()
+			{
+				Ssml = "<speak>Sorry, there was a problem with your request.  Please try again later.</speak>"
+			};
+
+			return ResponseBuilder.Tell(speechResponse);
 		}
     }
 }

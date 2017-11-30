@@ -67,7 +67,7 @@ namespace Jane.Alexa.Services
 				throw new ValidationException();
 			}
 
-			string responseSsml = $"<speak>{item.Title} is {item.Price} and has {item.LikeCount} likes.";
+			string responseSsml = $"<speak>{item.Title} is ${item.Price} and has {item.LikeCount} likes.</speak>";
 			var speechResponse = new SsmlOutputSpeech()
 			{
 				Ssml = responseSsml
