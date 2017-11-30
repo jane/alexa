@@ -8,7 +8,7 @@ using Newtonsoft.Json;
 namespace Jane.Alexa.Controllers
 {
     [Route("api/deals")]
-    public class ValuesController : Controller
+    public class SkillsController : Controller
     {
         // GET api/values
         [HttpPost]
