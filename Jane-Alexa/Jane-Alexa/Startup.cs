@@ -1,4 +1,5 @@
 ﻿using Jane.Alexa.Models;
+using Jane.Alexa.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -18,6 +19,8 @@ namespace Jane.Alexa
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddSingleton<IDealsService, DealsService>();
+            services.AddSingleton<IHttpClientService, HttpClientService>();
             services.Configure<ConnectionSettings>(Configuration.GetSection("ConnectionSettings"));
         }
 
@@ -28,8 +31,6 @@ namespace Jane.Alexa
             {
                 app.UseDeveloperExceptionPage();
             }
-
-            app.UseMvc();
         }
     }
 }
