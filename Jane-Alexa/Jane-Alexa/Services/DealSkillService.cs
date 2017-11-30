@@ -13,6 +13,7 @@ namespace Jane.Alexa.Services
 	public interface IDealsService
     {
         Task<SkillResponse> GetStoreFrontSpeachResponse(int take = 5, bool filterSoldOut = true, bool filterEndingSoon = true, bool filterIsNew = true);
+		Task<SkillResponse> GetStorefrontDealDetailsForDeal(int sortedDealKey);
     }
 
     public class DealSkillService : IDealsService
@@ -35,7 +36,7 @@ namespace Jane.Alexa.Services
                 .ConfigureAwait(false);
             var speechResponse = new SsmlOutputSpeech();
 
-            var builder = new StringBuilder("<speak>Today's top deals on Jane are:");
+            var builder = new StringBuilder($"<speak>Today's top {take} deals on Jane are:");
 
 			for(int i=0; i < storeFrontItems.Count; i++)
 			{
@@ -55,6 +56,11 @@ namespace Jane.Alexa.Services
 
             return response;
         }
-    }
+
+		public Task<SkillResponse> GetStorefrontDealDetailsForDeal(int sortedDealKey)
+		{
+			throw new System.NotImplementedException();
+		}
+	}
 }
 

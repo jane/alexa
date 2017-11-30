@@ -6,6 +6,9 @@ using Alexa.NET;
 using Newtonsoft.Json;
 using Jane.Alexa.Services;
 using System.Threading.Tasks;
+using System;
+using Alexa.NET.Request.Type;
+using System.ComponentModel.DataAnnotations;
 
 namespace Jane.Alexa.Controllers
 {
@@ -23,9 +26,46 @@ namespace Jane.Alexa.Controllers
 		[ProducesResponseType(typeof(SkillResponse), 200)]
 		public async Task<IActionResult> PostHandleDealSkillRequest([FromBody]SkillRequest skillRequest)
 		{
-			var speechResponse = await _dealsService.GetStoreFrontSpeachResponse();
+			try
+			{
+				SkillResponse response = null;
+				if (skillRequest.Request.Type == "IntentRequest")
+				{
+					IntentRequest ir = skillRequest.Request as IntentRequest;
+					string intentName = ir.Intent.Name;
+					if(intentName == "Deals")
+					{
+						//get the dealTake number, assume a default if no dealTake number was supplied.
+						int dealTakeParse = 5;
+						Int32.TryParse(ir.Intent.Slots["dealTake"].Value, out dealTakeParse);
+						int? dealTakeNumber = dealTakeParse;
 
-			return Ok(speechResponse);
+						response = await _dealsService.GetStoreFrontSpeachResponse(dealTakeParse);
+					}
+					else if(intentName == "DealDetail")
+					{
+						//we need to snag the item that the user asked for as a requirement
+						int sortedDealKey = 0;
+						if (!Int32.TryParse(ir.Intent.Slots["sortedDealNumber"].Value, out sortedDealKey))
+							throw new ValidationException();
+
+						//if we got the key, we can ask the service for the SkillResponse related to this deal by the sortedDealKey
+						response = await _dealsService.GetStorefrontDealDetailsForDeal(sortedDealKey);
+					}
+				}
+
+				return Ok(response);
+			}
+			catch(Exception ex)
+			{
+				return Ok(CreateErrorSkillResponse());
+			}
+
+		}
+
+		private static SkillResponse CreateErrorSkillResponse()
+		{
+			return new SkillResponse();
 		}
     }
 }
