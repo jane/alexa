@@ -23,14 +23,9 @@ namespace Jane.Alexa.Controllers
 		[ProducesResponseType(typeof(SkillResponse), 200)]
 		public async Task<IActionResult> PostHandleDealSkillRequest([FromBody]SkillRequest skillRequest)
 		{
-			var storefrontResults = await _dealsService.GetStorefront();
-			var speechResponse = new SsmlOutputSpeech();
-			speechResponse.Ssml = $"<speak>This is a test.  This is a test.  This is a test.</speak>";
-			
-			var response = ResponseBuilder.Tell(speechResponse);
-			response.Version = JsonConvert.SerializeObject(skillRequest);
+			var speechResponse = await _dealsService.GetStoreFrontSpeachResponse();
 
-			return Ok(response);
+			return Ok(speechResponse);
 		}
     }
 }

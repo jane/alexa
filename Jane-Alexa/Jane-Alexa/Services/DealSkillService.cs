@@ -3,49 +3,50 @@ using System.Threading.Tasks;
 using Jane.Alexa.Core;
 using Jane.Alexa.Models;
 using System.Linq;
+using System.Text;
+using Alexa.NET;
+using Alexa.NET.Response;
+using Newtonsoft.Json;
 
 namespace Jane.Alexa.Services
 {
 	public interface IDealsService
     {
-        Task<List<StorefrontItem>> GetStorefront(int take = 5, bool filterSoldOut = true, bool filterEndingSoon = true, bool filterIsNew = true);
+        Task<SkillResponse> GetStoreFrontSpeachResponse(int take = 5, bool filterSoldOut = true, bool filterEndingSoon = true, bool filterIsNew = true);
     }
 
     public class DealSkillService : IDealsService
     {
         private readonly ConnectionSettings _connectionSettings;
-        private IHttpClientService _httpClientService;
+        private IStoreFrontService _storeFrontService;
 
-        public DealSkillService(IHttpClientService httpClientService)
+        public DealSkillService(IStoreFrontService storeFrontService)
         {
-            _httpClientService = httpClientService;
-        }
-        
-        public async Task<List<StorefrontItem>> GetStorefront(
-			int take = 5, 
-			bool filterSoldOut = true, 
-			bool filterEndingSoon = true, 
-			bool filterIsNew = true)
-        {
-            List<StorefrontItem> storefrontResult =  await _httpClientService.Client().GetAsync<List<StorefrontItem>>("/storefront").ConfigureAwait(false);
-
-			storefrontResult = filterSoldOut
-				? storefrontResult.Where(sfr => !sfr.IsSoldOut).ToList()
-				: storefrontResult;
-
-			storefrontResult = filterEndingSoon
-				? storefrontResult.Where(sfr => !sfr.IsEndingSoon).ToList()
-				: storefrontResult;
-
-			storefrontResult = filterIsNew
-				? storefrontResult.Where(sfr => !sfr.IsNew).ToList()
-				: storefrontResult;
-
-			storefrontResult = storefrontResult.Take(take).ToList();
-
-			return storefrontResult;
+            _storeFrontService = storeFrontService;
         }
 
+        public async Task<SkillResponse> GetStoreFrontSpeachResponse(int take = 5,
+            bool filterSoldOut = true,
+            bool filterEndingSoon = true,
+            bool filterIsNew = true)
+        {
+            var storeFrontItems = await _storeFrontService.GetStorefront(take, filterSoldOut, filterEndingSoon, filterIsNew)
+                .ConfigureAwait(false);
+            var speechResponse = new SsmlOutputSpeech();
+
+            var builder = new StringBuilder("Today's top deals on Jane are:");
+
+            foreach (var item in storeFrontItems)
+            {
+                builder.AppendLine($"{item.Title}");
+            }
+            
+            speechResponse.Ssml = builder.ToString();
+
+            var response = ResponseBuilder.Tell(speechResponse);
+
+            return response;
+        }
     }
 }
 
