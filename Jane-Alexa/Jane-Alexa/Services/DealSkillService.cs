@@ -19,6 +19,7 @@ namespace Jane.Alexa.Services
     {
         private readonly ConnectionSettings _connectionSettings;
         private IStoreFrontService _storeFrontService;
+		private static string phraseBreaktime = ".5s";
 
         public DealSkillService(IStoreFrontService storeFrontService)
         {
@@ -34,13 +35,20 @@ namespace Jane.Alexa.Services
                 .ConfigureAwait(false);
             var speechResponse = new SsmlOutputSpeech();
 
-            var builder = new StringBuilder("Today's top deals on Jane are:");
+            var builder = new StringBuilder("<speak>Today's top deals on Jane are:");
 
-            foreach (var item in storeFrontItems)
-            {
-                builder.AppendLine($"{item.Title}");
-            }
-            
+			for(int i=0; i < storeFrontItems.Count; i++)
+			{
+				StorefrontItem item = storeFrontItems[i];
+				string andFinal = "";
+				if (i == storeFrontItems.Count - 1)
+					andFinal = "and ";
+
+				builder.Append($" {andFinal}{item.Title}<break time=\"{phraseBreaktime}\"/> ");
+			}
+
+			//close the speech
+			builder.Append("</speak>");
             speechResponse.Ssml = builder.ToString();
 
             var response = ResponseBuilder.Tell(speechResponse);
