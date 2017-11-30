@@ -7,13 +7,13 @@ using Newtonsoft.Json;
 
 namespace Jane.Alexa.Controllers
 {
-    [Route("api/deals")]
+	[Route("api")]
     public class SkillsController : Controller
     {
-        // GET api/values
         [HttpPost]
+		[Route("deals")]
 		[ProducesResponseType(typeof(SkillResponse), 200)]
-		public IActionResult PostHandleSkillRequest(SkillRequest skillRequest)
+		public IActionResult PostHandleDealSkillRequest([FromBody]SkillRequest skillRequest)
 		{
 			var speechResponse = new SsmlOutputSpeech();
 			speechResponse.Ssml = $"<speak>This is a test.  This is a test.  This is a test.</speak>";

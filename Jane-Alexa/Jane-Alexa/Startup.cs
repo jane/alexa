@@ -22,6 +22,7 @@ namespace Jane.Alexa
             services.AddSingleton<IDealsService, DealsService>();
             services.AddSingleton<IHttpClientService, HttpClientService>();
             services.Configure<ConnectionSettings>(Configuration.GetSection("ConnectionSettings"));
+			services.AddMvc();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -31,6 +32,8 @@ namespace Jane.Alexa
             {
                 app.UseDeveloperExceptionPage();
             }
+
+			app.UseMvc();
         }
     }
 }
