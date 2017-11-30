@@ -1,41 +1,27 @@
 ﻿using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc;
+using Alexa.NET.Response;
+using Alexa.NET.Request;
+using Alexa.NET;
+using Newtonsoft.Json;
 
 namespace Jane.Alexa.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/deals")]
     public class ValuesController : Controller
     {
         // GET api/values
-        [HttpGet]
-        public IEnumerable<string> Get()
-        {
-            return new string[] { "value1", "value2" };
-        }
-
-        // GET api/values/5
-        [HttpGet("{id}")]
-        public string Get(int id)
-        {
-            return "value";
-        }
-
-        // POST api/values
         [HttpPost]
-        public void Post([FromBody]string value)
-        {
-        }
+		[ProducesResponseType(typeof(SkillResponse), 200)]
+		public IActionResult PostHandleSkillRequest(SkillRequest skillRequest)
+		{
+			var speechResponse = new SsmlOutputSpeech();
+			speechResponse.Ssml = $"<speak>This is a test.  This is a test.  This is a test.</speak>";
 
-        // PUT api/values/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody]string value)
-        {
-        }
+			var response = ResponseBuilder.Tell(speechResponse);
+			response.Version = JsonConvert.SerializeObject(skillRequest);
 
-        // DELETE api/values/5
-        [HttpDelete("{id}")]
-        public void Delete(int id)
-        {
-        }
+			return Ok(response);
+		}
     }
 }
