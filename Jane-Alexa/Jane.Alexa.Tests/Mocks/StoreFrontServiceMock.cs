@@ -9,8 +9,8 @@ namespace Jane.Alexa.Tests.Mocks
 {
     public class StoreFrontServiceMock : IStoreFrontService
     {
-        public Task<List<StorefrontItem>> GetStorefront(int take = 5, bool filterSoldOut = true, bool filterEndingSoon = true, bool filterIsNew = true)
-        {
+        public Task<List<StorefrontItem>> GetStorefront(int take = 5)
+        { 
             var storeFrontItems = new List<StorefrontItem>();
             var random = new Random();
 
@@ -20,9 +20,9 @@ namespace Jane.Alexa.Tests.Mocks
                 {
                     DealId = random.Next(1, 100000),
                     IsDeliveredElectronically = true,
-                    IsEndingSoon = filterEndingSoon,
-                    IsNew = filterIsNew,
-                    IsSoldOut = filterSoldOut,
+                    IsEndingSoon = true,
+                    IsNew = true,
+                    IsSoldOut = true,
                     LikeCount = random.Next(0, 100),
                     Price = random.Next(5, 30),
                     Quantity = random.Next(1, 100),

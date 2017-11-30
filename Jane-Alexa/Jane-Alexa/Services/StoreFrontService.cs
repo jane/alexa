@@ -1,51 +1,42 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 using Jane.Alexa.Models;
 using Jane.Alexa.Core;
+using Microsoft.Extensions.Caching.Memory;
 
 namespace Jane.Alexa.Services
 {
     public interface IStoreFrontService
     {
         Task<List<StorefrontItem>> GetStorefront(
-            int take = 5,
-            bool filterSoldOut = true,
-            bool filterEndingSoon = true,
-            bool filterIsNew = true);
+            int take = 5);
     }
 
     public class StoreFrontService : IStoreFrontService
     {
         private readonly IHttpClientService _httpClientService;
+        private readonly IMemoryCache _cache;
 
-        public StoreFrontService(IHttpClientService httpClientService)
+        public StoreFrontService(IHttpClientService httpClientService, IMemoryCache cache)
         {
             _httpClientService = httpClientService;
+            _cache = cache;
         }
 
         public async Task<List<StorefrontItem>> GetStorefront(
-            int take = 5,
-            bool filterSoldOut = true,
-            bool filterEndingSoon = true,
-            bool filterIsNew = true)
+            int take = 5)
         {
             List<StorefrontItem> storefrontResult = await _httpClientService.Client().GetAsync<List<StorefrontItem>>("/storefront").ConfigureAwait(false);
 
-            storefrontResult = filterSoldOut
-                ? storefrontResult.Where(sfr => !sfr.IsSoldOut).ToList()
-                : storefrontResult;
-
-            storefrontResult = filterEndingSoon
-                ? storefrontResult.Where(sfr => !sfr.IsEndingSoon).ToList()
-                : storefrontResult;
-
-            storefrontResult = filterIsNew
-                ? storefrontResult.Where(sfr => !sfr.IsNew).ToList()
-                : storefrontResult;
-
             storefrontResult = storefrontResult.Take(take).ToList();
+
+            for (int i = 1; i <= take; i++)
+            {
+                _cache.Set(i.ToString(), storefrontResult[i - 1]);
+            }
 
             return storefrontResult;
         }

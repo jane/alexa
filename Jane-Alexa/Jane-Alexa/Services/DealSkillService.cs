@@ -12,7 +12,7 @@ namespace Jane.Alexa.Services
 {
 	public interface IDealsService
     {
-        Task<SkillResponse> GetStoreFrontSpeachResponse(int take = 5, bool filterSoldOut = true, bool filterEndingSoon = true, bool filterIsNew = true);
+        Task<SkillResponse> GetStoreFrontSpeachResponse(int take = 5);
 		Task<SkillResponse> GetStorefrontDealDetailsForDeal(int sortedDealKey);
     }
 
@@ -27,12 +27,9 @@ namespace Jane.Alexa.Services
             _storeFrontService = storeFrontService;
         }
 
-        public async Task<SkillResponse> GetStoreFrontSpeachResponse(int take = 5,
-            bool filterSoldOut = true,
-            bool filterEndingSoon = true,
-            bool filterIsNew = true)
+        public async Task<SkillResponse> GetStoreFrontSpeachResponse(int take = 5)
         {
-            var storeFrontItems = await _storeFrontService.GetStorefront(take, filterSoldOut, filterEndingSoon, filterIsNew)
+            var storeFrontItems = await _storeFrontService.GetStorefront(take)
                 .ConfigureAwait(false);
             var speechResponse = new SsmlOutputSpeech();
 
