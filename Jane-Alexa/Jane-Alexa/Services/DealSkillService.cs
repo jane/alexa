@@ -7,6 +7,8 @@ using System.Text;
 using Alexa.NET;
 using Alexa.NET.Response;
 using Newtonsoft.Json;
+using Microsoft.Extensions.Caching.Memory;
+using System.ComponentModel.DataAnnotations;
 
 namespace Jane.Alexa.Services
 {
@@ -20,11 +22,13 @@ namespace Jane.Alexa.Services
     {
         private readonly ConnectionSettings _connectionSettings;
         private IStoreFrontService _storeFrontService;
+		private IMemoryCache _memCache;
 		private static string phraseBreaktime = ".5s";
 
-        public DealSkillService(IStoreFrontService storeFrontService)
+        public DealSkillService(IStoreFrontService storeFrontService, IMemoryCache memCache)
         {
             _storeFrontService = storeFrontService;
+			_memCache = memCache;
         }
 
         public async Task<SkillResponse> GetStoreFrontSpeachResponse(int take = 5)
@@ -56,7 +60,20 @@ namespace Jane.Alexa.Services
 
 		public Task<SkillResponse> GetStorefrontDealDetailsForDeal(int sortedDealKey)
 		{
-			throw new System.NotImplementedException();
+			StorefrontItem item = _memCache.Get<StorefrontItem>($"{sortedDealKey}");
+
+			if(item == null)
+			{
+				throw new ValidationException();
+			}
+
+			string responseSsml = $"<speak>{item.Title} is {item.Price} and has {item.LikeCount} likes.";
+			var speechResponse = new SsmlOutputSpeech()
+			{
+				Ssml = responseSsml
+			};
+
+			return Task.FromResult(ResponseBuilder.Tell(speechResponse));
 		}
 	}
 }

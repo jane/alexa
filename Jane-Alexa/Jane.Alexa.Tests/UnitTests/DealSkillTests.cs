@@ -6,6 +6,7 @@ using Alexa.NET.Response;
 using Jane.Alexa.Services;
 using Jane.Alexa.Tests.Mocks;
 using Xunit;
+using Microsoft.Extensions.Caching.Memory;
 
 namespace Jane.Alexa.Tests.UnitTests
 {
@@ -14,7 +15,7 @@ namespace Jane.Alexa.Tests.UnitTests
         [Fact]
         public async Task GettingDealfrontResponse_ReturnsSkillResponse()
         {
-            var service = new DealSkillService(new StoreFrontServiceMock());
+            var service = new DealSkillService(new StoreFrontServiceMock(), new MemoryCache(null));
 
             var response = await service.GetStoreFrontSpeachResponse().ConfigureAwait(false);
 
