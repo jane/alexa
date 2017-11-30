@@ -21,6 +21,7 @@ namespace Jane.Alexa
         {
             services.AddSingleton<IDealsService, DealSkillService>();
             services.AddSingleton<IHttpClientService, HttpClientService>();
+            services.AddSingleton<IStoreFrontService, StoreFrontService>();
             services.Configure<ConnectionSettings>(Configuration.GetSection("ConnectionSettings"));
 			services.AddMvc();
         }
