@@ -19,7 +19,7 @@ namespace Jane.Alexa
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddSingleton<IDealsService, DealsService>();
+            services.AddSingleton<IDealsService, DealSkillService>();
             services.AddSingleton<IHttpClientService, HttpClientService>();
             services.Configure<ConnectionSettings>(Configuration.GetSection("ConnectionSettings"));
 			services.AddMvc();
