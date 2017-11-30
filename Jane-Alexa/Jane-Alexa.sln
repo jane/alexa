@@ -5,6 +5,8 @@ VisualStudioVersion = 15.0.26730.16
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Jane.Alexa", "Jane-Alexa\Jane.Alexa.csproj", "{33F18115-C6D8-4D11-8805-6437971E4852}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Jane.Alexa.Tests", "Jane.Alexa.Tests\Jane.Alexa.Tests.csproj", "{010B2AA7-5D48-4514-8CE8-1009A73763F2}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{33F18115-C6D8-4D11-8805-6437971E4852}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{33F18115-C6D8-4D11-8805-6437971E4852}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{33F18115-C6D8-4D11-8805-6437971E4852}.Release|Any CPU.Build.0 = Release|Any CPU
+		{010B2AA7-5D48-4514-8CE8-1009A73763F2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{010B2AA7-5D48-4514-8CE8-1009A73763F2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{010B2AA7-5D48-4514-8CE8-1009A73763F2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{010B2AA7-5D48-4514-8CE8-1009A73763F2}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

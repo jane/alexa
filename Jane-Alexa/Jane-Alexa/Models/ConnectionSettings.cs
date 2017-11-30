@@ -2,7 +2,7 @@
 {
     public class ConnectionSettings
     {
-        private string JaneCatalogEndpoint { get; set; }
+        public string JaneCatalogEndpoint { get; set; }
 
     }
 }

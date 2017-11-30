@@ -1,4 +1,5 @@
 ﻿using Jane.Alexa.Models;
+using Jane.Alexa.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -19,6 +20,8 @@ namespace Jane.Alexa
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddMvc();
+            services.AddSingleton<IDealsService, DealsService>();
+            services.AddSingleton<IHttpClientService, HttpClientService>();
             services.Configure<ConnectionSettings>(Configuration.GetSection("ConnectionSettings"));
         }
 
