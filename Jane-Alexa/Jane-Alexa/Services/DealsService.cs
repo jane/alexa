@@ -12,8 +12,7 @@ namespace Jane.Alexa.Services
 {
     public interface IDealsService
     {
-        Task<List<object>> GetDeals();
-
+        Task<List<StorefrontItem>> GetStorefront();
     }
 
     public class DealsService : IDealsService
@@ -26,10 +25,9 @@ namespace Jane.Alexa.Services
             _httpClientService = httpClientService;
         }
         
-
-        public async Task<List<object>> GetDeals()
+        public async Task<List<StorefrontItem>> GetStorefront()
         {
-            return await _httpClientService.Client().GetAsync<List<object>>("/deals").ConfigureAwait(false);
+            return await _httpClientService.Client().GetAsync<List<StorefrontItem>>("/storefront").ConfigureAwait(false);
         }
     }
 }
